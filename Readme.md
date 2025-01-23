@@ -1,7 +1,7 @@
 # MazeSolver
 
-MazeSolver is a .NET 8 application that provides an simple API for solving mazes in specific srting format.
-At the moment it includes various services to handle maze solving requests using BFS and DFS algorithms.
+MazeSolver is a .NET 8 application with a simple API for solving mazes in specific string format.
+At the moment, it includes various services to handle maze-solving requests using BFS and DFS algorithms.
 Currently, the application supports only one maze at a time and stores the maze in memory.
 
 ## Projects
@@ -81,13 +81,13 @@ Response Body:
 
 ## Services
 
-- **IMazeSolver**: Interface for maze solving algorithms.
+- **IMazeSolver**: Interface for maze-solving algorithms.
 - **IMazeService**: Interface for maze-related operations.
 - **IRepository**: Interface for data access.
 
 ## Validators
 
-- **MazeRequestValidator**: Contains validation rules for maze solving requests (according to the specific input format).
+- **MazeRequestValidator**: Contains validation rules for maze-solving requests (according to the specific input format).
 
 ------------
 ### TODO:
