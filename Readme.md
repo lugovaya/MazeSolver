@@ -91,8 +91,8 @@ Response Body:
 
 ------------
 ### TODO:
-- [ ] Add configurable timeout
-- [ ] Add lazy initialization with static field to ensure thread safety in singleton
-- [ ] Consider making ```IMazeSolver``` generic, e.g. ```<TParam, TResult>```
+- [x] Add configurable timeout
+- [x] Ensure thread safety in singleton 
+- [x] Consider making ```IMazeSolver``` generic, e.g. ```<TParam, TResult>```
 - [ ] Consider to introduce an ```OperationResult<T>``` type to return the result and the error message in ```MazeService```
 - [ ] Consider to introduce ```Contracts``` to replace ```MazeConfigurationBase``` and use record types

@@ -1,9 +1,9 @@
 ﻿namespace MazeSolver.Domain
 {
     /// <summary>
-    /// A simple BFS implementation for solving the maze
+    /// A simple BFS implementation for solving the maze 
     /// </summary>
-    public class BFSMazeSolver : IMazeSolver
+    public class BFSMazeSolver : IStringBasedMazeSolver
     {
         private static readonly (int, int)[] Directions =
         [
@@ -29,7 +29,7 @@
             var parent = new (int, int)[rows.Length, rows[0].Length];
 
             queue.Enqueue(start);
-            visited[start.Item1, start.Item2] = true;
+            visited[start.X, start.Y] = true;
 
             while (queue.Count > 0)
             {
@@ -57,12 +57,12 @@
             return null; // No solution found
         }
 
-        private static (int, int) FindPoint(string maze, char point)
+        private static (int X, int Y) FindPoint(string maze, char point)
         {
             var rows = maze.Split('\n');
-            for (int i = 0; i < rows.Length; i++)
+            for (var i = 0; i < rows.Length; i++)
             {
-                int index = rows[i].IndexOf(point);
+                var index = rows[i].IndexOf(point);
                 if (index != -1)
                 {
                     return (i, index);
@@ -77,17 +77,17 @@
                    rows[x][y] != 'X' && !visited[x, y];
         }
 
-        private static string ReconstructPath((int, int)[,] parent, (int, int) start, (int, int) goal)
+        private static string ReconstructPath((int, int)[,] parent, (int X, int Y) start, (int X, int Y) goal)
         {
             var path = new List<string>();
             var current = goal;
 
             while (current != start)
             {
-                path.Add($"({current.Item1},{current.Item2})");
-                current = parent[current.Item1, current.Item2];
+                path.Add($"({current.X},{current.Y})");
+                current = parent[current.X, current.Y];
             }
-            path.Add($"({start.Item1},{start.Item2})");
+            path.Add($"({start.X},{start.Y})");
             path.Reverse();
             return string.Join(" -> ", path);
         }

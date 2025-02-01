@@ -11,13 +11,13 @@ namespace MazeSolver.Tests.Services
     {
         private MazeService _service;
         private IRepository<MazeConfiguration, Guid> _mockRepository;
-        private IMazeSolver _mockSolver;
+        private IStringBasedMazeSolver _mockSolver;
 
         [SetUp]
         public void SetUp()
         {
             _mockRepository = Substitute.For<IRepository<MazeConfiguration, Guid>>();
-            _mockSolver = Substitute.For<IMazeSolver>();
+            _mockSolver = Substitute.For<IStringBasedMazeSolver>();
             _service = new MazeService(_mockRepository, _mockSolver);
         }
 

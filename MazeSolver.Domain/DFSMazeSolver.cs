@@ -1,12 +1,20 @@
-﻿namespace MazeSolver.Domain
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+namespace MazeSolver.Domain
 {
     /// <summary>
     /// A simple DFS implementation for solving the maze
     /// </summary>
-    public class DFSMazeSolver : IMazeSolver
+    public class DFSMazeSolver : IStringBasedMazeSolver
     {
-        private readonly int[] _rowDirections = [-1, 1, 0, 0]; // Up, Down, Left, Right
-        private readonly int[] _colDirections = [0, 0, -1, 1];
+        private static readonly (int X, int Y)[] Directions =
+        [
+            (-1, 0), // Up
+            (1, 0),  // Down
+            (0, -1), // Left
+            (0, 1)   // Right
+        ];
 
         public string? Solve(string maze)
         {
@@ -15,8 +23,8 @@
             var rows = mazeArray.GetLength(0);
             var columns = mazeArray.GetLength(1);
 
-            var start = FindStart(mazeArray, rows, columns);
-            var goal = FindGoal(mazeArray, rows, columns);
+            var start = FindPoint(mazeArray, rows, columns, 'S');
+            var goal = FindPoint(mazeArray, rows, columns, 'G');
 
             if (start == null || goal == null)
             {
@@ -24,11 +32,11 @@
             }
 
             // Stack for DFS traversal
-            var stack = new Stack<(int row, int col, List<(int, int)> path)>();
-            stack.Push((start.Value.Item1, start.Value.Item2, new List<(int, int)> { start.Value }));
+            var stack = new Stack<(int row, int column, List<(int, int)> path)>();
+            stack.Push((start.Value.X, start.Value.Y, new List<(int, int)> { start.Value }));
 
             var visited = new bool[rows, columns];
-            visited[start.Value.Item1, start.Value.Item2] = true;
+            visited[start.Value.X, start.Value.Y] = true;
 
             // DFS algorithm
             while (stack.Count > 0)
@@ -36,7 +44,7 @@
                 var (currentRow, currentColumn, currentPath) = stack.Pop();
 
                 // If we've reached the goal, return the path
-                if (currentRow == goal.Value.Item1 && currentColumn == goal.Value.Item2)
+                if (currentRow == goal.Value.X && currentColumn == goal.Value.Y)
                 {
                     return PathToString(currentPath);
                 }
@@ -44,8 +52,9 @@
                 // Explore all 4 directions
                 for (int i = 0; i < 4; i++)
                 {
-                    var newRow = currentRow + _rowDirections[i];
-                    var newColumn = currentColumn + _colDirections[i];
+                    var (x, y) = Directions[i];
+                    var newRow = currentRow + x;
+                    var newColumn = currentColumn + y;
 
                     if (IsValidMove(mazeArray, newRow, newColumn, visited, rows, columns))
                     {
@@ -55,7 +64,7 @@
                     }
                 }
             }
-            
+
             return null; // No solution found
         }
 
@@ -77,30 +86,13 @@
             return maze;
         }
 
-        // Find the start (S) position in the maze
-        private static (int, int)? FindStart(char[,] maze, int rows, int columns)
+        private static (int X, int Y)? FindPoint(char[,] maze, int rows, int columns, char point)
         {
             for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < columns; j++)
                 {
-                    if (maze[i, j] == 'S')
-                    {
-                        return (i, j);
-                    }
-                }
-            }
-            return null;
-        }
-
-        // Find the goal (G) position in the maze
-        private static (int, int)? FindGoal(char[,] maze, int rows, int columns)
-        {
-            for (int i = 0; i < rows; i++)
-            {
-                for (int j = 0; j < columns; j++)
-                {
-                    if (maze[i, j] == 'G')
+                    if (maze[i, j] == point)
                     {
                         return (i, j);
                     }
@@ -123,16 +115,9 @@
         }
 
         // Convert the path (list of coordinates) to a string
-        private static string PathToString(List<(int, int)> path)
+        private static string PathToString(List<(int X, int Y)> path)
         {
-            var pathString = string.Empty;
-
-            foreach (var (row, col) in path)
-            {
-                pathString += $"({row},{col}) ";
-            }
-
-            return pathString.Trim();
+            return string.Join("->", path.Select(point => $"({point.X}, {point.Y})")).Trim();
         }
     }
 }

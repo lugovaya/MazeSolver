@@ -1,13 +1,12 @@
 ﻿using MazeSolver.Domain.Models;
+using System.Collections.Concurrent;
 
 namespace MazeSolver.Domain.DataAccess
 {
     public class BasicInMemoryMazeRepository : IRepository<MazeConfiguration, Guid>
     {
-        // TODO: lazy initialization with static field to ensure thread safety in singleton 
-
-        // Dictionary to simulate in-memory database, key is the maze Id
-        private readonly Dictionary<Guid, MazeConfiguration> _mazeDataStore = [];
+        // ConcurrentDictionary to ensure thread safety
+        private readonly ConcurrentDictionary<Guid, MazeConfiguration> _mazeDataStore = new();
 
         public void Add(MazeConfiguration entity)
         {
@@ -23,7 +22,7 @@ namespace MazeSolver.Domain.DataAccess
         public void Delete(Guid id)
         {
             // Remove the maze from the dictionary if it exists
-            if (!_mazeDataStore.Remove(id))
+            if (!_mazeDataStore.TryRemove(id, out _))
             {
                 throw new ArgumentException("Maze with the specified Id not found.");
             }

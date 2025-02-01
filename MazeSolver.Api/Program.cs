@@ -26,7 +26,7 @@ public class Startup
 {
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddTransient<IMazeSolver, BFSMazeSolver>();
+        services.AddTransient<IStringBasedMazeSolver, BFSMazeSolver>();
         services.AddScoped<IMazeService<Guid, string?>, MazeService>();
         services.AddScoped<IValidator<MazeRequestModel>, MazeRequestValidator>();
         services.AddSingleton<IRepository<MazeConfiguration, Guid>, BasicInMemoryMazeRepository>();

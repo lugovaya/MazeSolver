@@ -19,7 +19,7 @@ namespace MazeSolver.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet(Name = "GetMazes")]
-        public IResult Get()
+        public IResult Get() // TODO: consider to add PagedList
         {
             var mazes = _mazeService.GetAll();
             return Results.Ok(mazes);

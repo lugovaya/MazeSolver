@@ -6,10 +6,10 @@ namespace MazeSolver.Domain.Services
 {
     public class MazeService(
         IRepository<MazeConfiguration, Guid> mazeRepository,
-        IMazeSolver mazeSolver) : IMazeService<Guid, string?> // TODO: consider to introduce an OperationResult<T> type to return the result and the error message
+        IStringBasedMazeSolver mazeSolver) : IMazeService<Guid, string?> // TODO: consider to introduce an OperationResult<T> type to return the result and the error message
     {
         private readonly IRepository<MazeConfiguration, Guid> _mazeRepository = mazeRepository;
-        private readonly IMazeSolver mazeSolver = mazeSolver;
+        private readonly IStringBasedMazeSolver mazeSolver = mazeSolver;
 
         public MazeConfigurationBase<string?, Guid> Get(Guid id)
         {
